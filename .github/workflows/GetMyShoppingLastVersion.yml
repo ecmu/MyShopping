@@ -24,7 +24,7 @@ jobs:
         if: env.remote_version != env.local_version
         uses: ncipollo/release-action@v1
         with:
-          #allowUpdates: True
+          allowUpdates: False
           tag: ${{ env.remote_version }}
           name: "Release build (${{ env.remote_version }})"
           omitBody: True
