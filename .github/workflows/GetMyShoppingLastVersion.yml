@@ -7,28 +7,23 @@ jobs:
   get-version:
     runs-on: ubuntu-latest
     steps:
-      #- uses: actions/checkout@v3
-      #  #with:
-      #  #  token: ${{ secrets.REPO_SCOPED_TOKEN }}
       - name: Fetch release versions
         id: fetch_versions
         run: |
           echo "remote_version=$(curl -sL https://api.github.com/repos/sokolovromann/MyShopping/releases/latest | jq -r '.tag_name')" >>$GITHUB_OUTPUT
           echo "local_version=$(curl -sL https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest | jq -r '.tag_name')" >>$GITHUB_OUTPUT
-        #run: |
-        #  curl -sL https://api.github.com/repos/sokolovromann/MyShopping/releases/latest | jq -r ".tag_name" > release-versions/MyShopping-latest.txt
       - name: Show versions
         env:
           remote_version: ${{ steps.fetch_versions.outputs.remote_version }}
           local_version: ${{ steps.fetch_versions.outputs.local_version }}
         run: echo "local version ($local_version) vs remote version ($remote_version)."
-      #- name: Check for modified files
-      #  id: git-check
-      #  run: echo 'name=modified::$([ -z "`git status --porcelain`" ] && echo "false" || echo "true")' >>$GITHUB_OUTPUT
-      #- name: Commit latest release version
-      #  if: steps.git-check.outputs.modified == 'true'
-      #  run: |
-      #    git config --global user.name 'ecmu'
-      #    git config --global user.email 'ecmu@free.fr'
-      #    git commit -am "New release version"
-      #    git push
+      - name: Create new version tag
+        env:
+          remote_version: ${{ steps.fetch_versions.outputs.remote_version }}
+          local_version: ${{ steps.fetch_versions.outputs.local_version }}
+        if: ${{ remote_version != local_version }}
+        run: echo "Creating new tag..."
+        #uses: laputansoft/github-tag-action@v4.6
+        #with:
+        #  github_token: ${{ env.github-token }}
+        #  tag: ${{ steps.package-version.outputs.version }}
