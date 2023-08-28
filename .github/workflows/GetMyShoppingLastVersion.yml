@@ -29,3 +29,15 @@ jobs:
           name: "Release build (${{ env.remote_version }})"
           omitBody: True
           token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create new version release
+        if: env.remote_version != env.local_version
+        uses: CupOfTea696/gh-action-auto-release@v1.0.0
+        with:
+          title: "Release: test"
+          tag: ${{ env.remote_version }}
+          draft: false
+          #regex: "/^Release: #{semver}$/i"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+          
