@@ -17,9 +17,9 @@ jobs:
         #  remote_version: ${{ steps.fetch_versions.outputs.remote_version }}
         #  local_version: ${{ steps.fetch_versions.outputs.local_version }}
         run: echo "local version ($local_version) vs remote version ($remote_version)."
-      #- name: Checkout
-      #  if: env.remote_version != env.local_version
-      #  uses: actions/checkout@v3
+      - name: Checkout
+        if: env.remote_version != env.local_version
+        uses: actions/checkout@v3
       - name: Create new version release
         if: env.remote_version != env.local_version
         uses: ncipollo/release-action@v1
@@ -29,12 +29,3 @@ jobs:
           name: "Release build (${{ env.remote_version }})"
           omitBody: True
           token: ${{ secrets.GITHUB_TOKEN }}
-        #uses: "marvinpinto/action-automatic-releases@latest"
-        #with:
-        #  repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        #  automatic_release_tag: ${{ env.remote_version }}
-        #  prerelease: false
-        #  title: "Release build (${{ env.remote_version }})"
-          #files: |
-          #  LICENSE.txt
-          #  *.jar
