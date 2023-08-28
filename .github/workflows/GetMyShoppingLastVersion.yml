@@ -11,11 +11,16 @@ jobs:
       #  #with:
       #  #  token: ${{ secrets.REPO_SCOPED_TOKEN }}
       - name: Fetch release versions
-        env:
-          remote_version: $(curl -sL https://api.github.com/repos/sokolovromann/MyShopping/releases/latest | jq -r ".tag_name")
-          local_version: $(curl -sL https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest | jq -r ".tag_name")
+        id: fetch_versions
+        run: |
+          echo "remote_version=$(curl -sL https://api.github.com/repos/sokolovromann/MyShopping/releases/latest | jq -r '.tag_name')" >>$GITHUB_OUTPUT
+          echo "local_version=$(curl -sL https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest | jq -r '.tag_name')" >>$GITHUB_OUTPUT
         #run: |
         #  curl -sL https://api.github.com/repos/sokolovromann/MyShopping/releases/latest | jq -r ".tag_name" > release-versions/MyShopping-latest.txt
+      - name: Show versions
+        env:
+          remote_version: ${{ steps.fetch_versions.outputs.remote_version }}
+          local_version: ${{ steps.fetch_versions.outputs.local_version }}
         run: echo "local version ($local_version) vs remote version ($remote_version)."
       #- name: Check for modified files
       #  id: git-check
