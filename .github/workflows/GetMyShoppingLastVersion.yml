@@ -21,7 +21,7 @@ jobs:
         env:
           remote_version: ${{ steps.fetch_versions.outputs.remote_version }}
           local_version: ${{ steps.fetch_versions.outputs.local_version }}
-        if: ${{ remote_version != local_version }}
+        if: remote_version != local_version
         run: echo "Creating new tag..."
         #uses: laputansoft/github-tag-action@v4.6
         #with:
