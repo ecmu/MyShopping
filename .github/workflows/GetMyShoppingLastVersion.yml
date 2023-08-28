@@ -20,15 +20,15 @@ jobs:
       - name: Checkout
         if: env.remote_version != env.local_version
         uses: actions/checkout@v3
-      - name: Create new version release
-        if: env.remote_version != env.local_version
-        uses: ncipollo/release-action@v1
-        with:
-          allowUpdates: False
-          tag: ${{ env.remote_version }}
-          name: "Release build (${{ env.remote_version }})"
-          omitBody: True
-          token: ${{ secrets.GITHUB_TOKEN }}
+      #- name: Create new version release
+      #  if: env.remote_version != env.local_version
+      #  uses: ncipollo/release-action@v1
+      #  with:
+      #    allowUpdates: False
+      #    tag: ${{ env.remote_version }}
+      #    name: "Release build (${{ env.remote_version }})"
+      #    omitBody: True
+      #    token: ${{ secrets.GITHUB_TOKEN }}
       - name: Create new version release
         if: env.remote_version != env.local_version
         uses: CupOfTea696/gh-action-auto-release@v1.0.0
