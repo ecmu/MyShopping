@@ -17,13 +17,15 @@ jobs:
           remote_version: ${{ steps.fetch_versions.outputs.remote_version }}
           local_version: ${{ steps.fetch_versions.outputs.local_version }}
         run: echo "local version ($local_version) vs remote version ($remote_version)."
-      - name: Create new version tag
+      - name: Create new version release
         env:
           remote_version: ${{ steps.fetch_versions.outputs.remote_version }}
           local_version: ${{ steps.fetch_versions.outputs.local_version }}
         if: env.remote_version != env.local_version
-        run: echo "Creating new tag..."
-        #uses: laputansoft/github-tag-action@v4.6
-        #with:
-        #  github_token: ${{ env.github-token }}
-        #  tag: ${{ steps.package-version.outputs.version }}
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: True
+          tag: ${{ env.remote_version }}
+          name: "Release build (${{ env.remote_version }})"
+          omitBody: True
+          token: ${{ secrets.GITHUB_TOKEN }}
