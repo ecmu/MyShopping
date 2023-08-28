@@ -10,17 +10,17 @@ jobs:
       - name: Fetch release versions
         id: fetch_versions
         run: |
-          echo "remote_version=$(curl -sL https://api.github.com/repos/sokolovromann/MyShopping/releases/latest | jq -r '.tag_name')" >>$GITHUB_OUTPUT
-          echo "local_version=$(curl -sL https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest | jq -r '.tag_name')" >>$GITHUB_OUTPUT
+          echo "remote_version=$(curl -sL https://api.github.com/repos/sokolovromann/MyShopping/releases/latest | jq -r '.tag_name')" >>$GITHUB_ENV
+          echo "local_version=$(curl -sL https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest | jq -r '.tag_name')" >>$GITHUB_ENV
       - name: Show versions
-        env:
-          remote_version: ${{ steps.fetch_versions.outputs.remote_version }}
-          local_version: ${{ steps.fetch_versions.outputs.local_version }}
+        #env:
+        #  remote_version: ${{ steps.fetch_versions.outputs.remote_version }}
+        #  local_version: ${{ steps.fetch_versions.outputs.local_version }}
         run: echo "local version ($local_version) vs remote version ($remote_version)."
+      - name: Checkout
+        if: env.remote_version != env.local_version
+        uses: actions/checkout@v3
       - name: Create new version release
-        env:
-          remote_version: ${{ steps.fetch_versions.outputs.remote_version }}
-          local_version: ${{ steps.fetch_versions.outputs.local_version }}
         if: env.remote_version != env.local_version
         uses: ncipollo/release-action@v1
         with:
