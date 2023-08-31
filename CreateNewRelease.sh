@@ -15,4 +15,4 @@ cat <<EOF > data.json
 EOF
 #cat data.json
 
-curl -L -X POST -header "Accept: application/vnd.github+json" --header "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $GITHUB_TOKEN" --data @data.json https://api.github.com/repos/$GITHUB_REPOSITORY/releases
+curl -L -X POST --header "Accept: application/vnd.github+json" --header "X-GitHub-Api-Version: 2022-11-28" --header "Authorization: Bearer $GITHUB_TOKEN" --data @data.json https://api.github.com/repos/$GITHUB_REPOSITORY/releases
